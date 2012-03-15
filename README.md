@@ -1,6 +1,6 @@
 jrubysql
 ========
-JDBC-backed SQL client for any RDBMS with JDBC driver. Only runs on JRuby.
+An SQL client for any JDBC-compliant database. Written in JRuby.
 
 Installation
 ------------

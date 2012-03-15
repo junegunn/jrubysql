@@ -7,9 +7,9 @@ Gem::Specification.new do |s|
   s.version     = JRubySQL::VERSION
   s.authors     = ["Junegunn Choi"]
   s.email       = ["junegunn.c@gmail.com"]
-  s.homepage    = ""
-  s.summary     = %q{JDBC-backed SQL client}
-  s.description = %q{JDBC-backed SQL client written in JRuby}
+  s.homepage    = "https://github.com/junegunn/jrubysql"
+  s.summary     = %q{An SQL client for any JDBC-compliant database.}
+  s.description = %q{An SQL client for any JDBC-compliant database. Written in JRuby.}
 
   s.rubyforge_project = "jrubysql"
 

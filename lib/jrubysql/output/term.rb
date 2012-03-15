@@ -4,14 +4,12 @@ require 'java'
 
 module JRubySQL
 module Output
-class Term < JRubySQL::Output::Base
+class Term
   include JRubySQL::Messages
 
   HELP = Erubis::Eruby.new(File.read File.join(File.dirname(__FILE__), '../doc/help.txt.erb')).result(binding)
 
-  def initialize controller
-    @controller = controller
-
+  def initialize
     # Make use of JLine included in JRuby
     java_import 'jline.Terminal'
     @terminal = Terminal.getTerminal
@@ -80,7 +78,7 @@ class Term < JRubySQL::Output::Base
 private
   def print_table ret
     cnt = 0
-    lines = [(@terminal.getTerminalHeight rescue JRubySQL::Constants::MAX_SCREEN_ROWS) - 6, 
+    lines = [(@terminal.getTerminalHeight rescue JRubySQL::Constants::MAX_SCREEN_ROWS) - 5, 
              JRubySQL::Constants::MIN_SCREEN_ROWS].max
     ret.each_slice(lines) do |slice|
       cnt += slice.length
@@ -106,7 +104,12 @@ private
   end
 
   def decorate value
-    value.to_s
+    case value
+    when BigDecimal
+      value.to_s('F')
+    else
+      value.to_s
+    end
   end
 
   def now
