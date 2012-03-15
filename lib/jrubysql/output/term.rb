@@ -63,12 +63,13 @@ class Term
     if ret[:set?]
       begin
         cnt = print_table ret[:result]
-        result m(:rows_returned, cnt, elapsed)
+        result m(:rows_returned, cnt, cnt > 1 ? 's' : '', elapsed)
       rescue Interrupt
         warn m(:interrupted)
       end
     elsif ret[:result]
-      result m(:rows_affected, [0, ret[:result]].max, elapsed)
+      cnt = [0, ret[:result]].max
+      result m(:rows_affected, cnt, cnt > 1 ? 's' : '', elapsed)
     else
       result elapsed
     end

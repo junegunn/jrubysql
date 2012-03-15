@@ -37,7 +37,7 @@ interrupted:
   Interrupted.
 
 rows returned:
-  $$ rows. $$
+  $$ row$$. $$
 rows affected:
-  $$ rows affected. $$
+  $$ row$$ affected. $$
 
