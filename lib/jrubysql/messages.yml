@@ -1,0 +1,43 @@
+---
+choose parameter:
+  "Parameter not given. Choose one:"
+ask password:
+  "Password: "
+
+invalid connection:
+  Invalid connection specification
+unsupported database:
+  $$ is not supported yet. Try with -c and -j options instead.
+oracle service name required:
+  Oracle service name must be included in the hostname: e.g. localhost:1521/orcl
+invalid output:
+  Invalid output type.
+file not found:
+  "File not found: $$"
+
+connecting:
+  Connecting to the database ...
+connected:
+  Connected.
+
+set delimiter:
+  Setting delimiter to $$
+current autocommit:
+  "Current autocommit: $$"
+turn autocommit:
+  "Turning autocommit $$"
+invalid autocommit:
+  "Invalid option: '$$'. Required: [on|off]"
+unknown command:
+  Unknown command. Possibly a bug.
+goodbye:
+  Goodbye!
+
+interrupted:
+  Interrupted.
+
+rows returned:
+  $$ rows. $$
+rows affected:
+  $$ rows affected. $$
+

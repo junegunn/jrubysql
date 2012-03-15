@@ -22,6 +22,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency "test-unit"
 
   s.add_runtime_dependency "jdbc-helper", '~> 0.7.2'
+  s.add_runtime_dependency "insensitive_hash", '~> 0.2.3'
   s.add_runtime_dependency "tabularize", '~> 0.1.1'
   s.add_runtime_dependency "each_sql", '~> 0.3.1'
   s.add_runtime_dependency "highline", '~> 1.6.11'

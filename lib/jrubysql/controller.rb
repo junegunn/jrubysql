@@ -2,18 +2,20 @@ require 'quote_unquote'
 
 module JRubySQL
 class Controller
+  include JRubySQL::Messages
+
   attr_reader :db_type
 
   def initialize options, argv_str
     @config = JRubySQL::Config.new
-    histories = @config['history']
+    histories = @config['connections']
 
     if options.nil?
       if histories.nil? || histories.empty?
         JRubySQL::OptionParser.parse []
       else
         # FIXME: Output
-        puts "Parameter not given. Choose one:"
+        puts m(:choose_parameter)
         histories.each_with_index do |history, idx|
           puts "[#{idx + 1}] #{history.first}"
         end
@@ -44,31 +46,34 @@ class Controller
     end
 
     # Setting up output: Colored terminal 
-    if @options[:color]
+    case @options[:output]
+    when 'cterm'
       @output = JRubySQL::Output::CTerm.new(self)
-    else
+    when 'term'
       @output = JRubySQL::Output::Term.new(self)
+    when 'csv'
+      @output = JRubySQL::Output::CSV.new(self)
     end
   end
 
   def start
     @output.welcome!
-    @output.info "Connecting to the database ..."
+    @output.info m(:connecting)
     begin
       @rdbms = JRubySQL::RDBMS.new @options
     rescue Exception => e
       @output.error e.to_s
       exit 1
     end
-    @output.info "Connected."
+    @output.info m(:connected)
 
-    history = @config['history'] || []
+    history = @config['connections'] || []
     history.unshift [@argv_str, @options]
     history.uniq!
     if history.length > JRubySQL::Constants::MAX_CONNECTION_HISTORY
       history = history[0, JRubySQL::Constants::MAX_CONNECTION_HISTORY]
     end
-    @config['history'] = history
+    @config['connections'] = history
 
     loop do
       ret = @input.get
@@ -105,25 +110,25 @@ private
     when :help
       @output.print_help
     when :quit
-      @output.info "Goodbye!"
+      @output.info m(:goodbye)
       quit!
     when :delimiter
-      @output.info "Setting delimiter to #{params}"
+      @output.info m(:set_delimiter, params)
       @input.delimiter = params
     when :now
       @output.info Time.now.strftime('%Y/%m/%d %H:%M:%S.%L')
     when :autocommit
       if params.nil?
-        @output.info "Current autocommit: #{@rdbms.autocommit ? 'on' : 'off'}"
+        @output.info m(:current_autocommit, @rdbms.autocommit ? 'on' : 'off')
       elsif %[on off].include?(params.downcase)
         @rdbms.autocommit = params.downcase == 'on'
-        @output.info "Turning autocommit #{params.downcase}"
+        @output.info m(:turn_autocommit, params.downcase)
       else
-        @output.error "Invalid option: '#{params}'. Required: [on|off]"
+        @output.error m(:invalid_autocommit, params)
       end
     else
       # TODO
-      @output.error "Unknown command. Possibly a bug."
+      @output.error m(:unknown_command)
     end
   end
 

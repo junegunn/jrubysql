@@ -1,19 +1,23 @@
 require 'erubis'
 require 'tabularize'
 require 'java'
-java_import 'jline.Terminal'
-trap 'INT' do
-  Thread.main.raise Interrupt
-end
 
 module JRubySQL
 module Output
 class Term < JRubySQL::Output::Base
+  include JRubySQL::Messages
+
   HELP = Erubis::Eruby.new(File.read File.join(File.dirname(__FILE__), '../doc/help.txt.erb')).result(binding)
 
   def initialize controller
     @controller = controller
-    @terminal   = Terminal.getTerminal
+
+    # Make use of JLine included in JRuby
+    java_import 'jline.Terminal'
+    @terminal = Terminal.getTerminal
+    trap 'INT' do
+      Thread.main.raise Interrupt
+    end
   end
 
   def welcome!
@@ -61,21 +65,22 @@ class Term < JRubySQL::Output::Base
     if ret[:set?]
       begin
         cnt = print_table ret[:result]
-        result "#{cnt} rows. #{elapsed}"
+        result m(:rows_returned, cnt, elapsed)
       rescue Interrupt
-        warn "Interrupted."
+        warn m(:interrupted)
       end
     elsif ret[:result]
-      result "#{[0, ret[:result]].max} rows affected. #{elapsed}"
+      result m(:rows_affected, [0, ret[:result]].max, elapsed)
     else
       result elapsed
     end
+    puts
   end
 
 private
   def print_table ret
     cnt = 0
-    lines = [(@terminal.getTerminalHeight rescue JRubySQL::Constants::MAX_SCREEN_ROWS) - 5, 
+    lines = [(@terminal.getTerminalHeight rescue JRubySQL::Constants::MAX_SCREEN_ROWS) - 6, 
              JRubySQL::Constants::MIN_SCREEN_ROWS].max
     ret.each_slice(lines) do |slice|
       cnt += slice.length

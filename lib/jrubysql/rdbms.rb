@@ -2,6 +2,8 @@ require 'jdbc-helper'
 
 module JRubySQL
 class RDBMS
+  include JRubySQL::Messages
+
   def self.get_type driver_or_type
     case driver_or_type.to_s.downcase
     when /oracle/
@@ -28,7 +30,7 @@ class RDBMS
           host, svc = options[:host].split('/')
           if svc.nil?
             # FIXME
-            raise ArgumentError.new "Oracle service name must be included in the hostname: e.g. localhost/orcl"
+            raise ArgumentError.new m(:oracle_service_name_required)
           end
           JDBCHelper::OracleConnector.connect(
             host, options[:user], options[:password], svc)
@@ -46,10 +48,10 @@ class RDBMS
             :url      => options[:url],
             :user     => options[:user],
             :password => options[:password]
-          }.reject { |k, v| v.nil? }
+        }.reject { |k, v| v.nil? }
         )
       else
-        raise ArgumentError.new "Invalid connection specification"
+        raise ArgumentError.new m(:invalid_connection)
       end
   end
 

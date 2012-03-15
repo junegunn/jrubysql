@@ -4,8 +4,30 @@ JDBC-backed SQL client for any RDBMS with JDBC driver. Only runs on JRuby.
 
 Installation
 ------------
+
 ```
 gem install jrubysql
+```
+
+Usage
+-----
+
+```
+usage: jrubysql [options]
+       jrubysql -t DBMS_TYPE -h HOSTNAME [-u USERNAME -p [PASSWORD] [-d DATABASE]] [-f FILENAME]
+       jrubysql -c CLASSNAME -j JDBC_URL [-u USERNAME -p [PASSWORD] [-d DATABASE]] [-f FILENAME]
+
+    -t, --type DBMS_TYPE             Database type: mysql|oracle|postgres|sqlserver
+    -h, --host HOST                  DBMS host address
+    -c, --class-name CLASSNAME       Class name of the JDBC driver
+    -j, --jdbc-url JDBC_URL          JDBC URL for the connection
+    -u, --user USERNAME              Username
+    -p, --password [PASSWORD]        Password
+    -d, --database DATABASE          Name of the database (optional)
+    -f, --filename FILENAME          SQL script file
+    -o, --output OUTPUT_TYPE         Output type: cterm|term|csv (default: cterm)
+        --no-color                   Suppress ANSI color codes in output
+        --help                       Show this message
 ```
 
 Connecting to the database

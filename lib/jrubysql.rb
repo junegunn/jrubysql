@@ -1,9 +1,11 @@
 require "jrubysql/version"
 
 if RUBY_PLATFORM.match(/java/).nil?
-  raise LoadError, 'Sorry. jrubysql only runs on JRuby.'
+  puts 'Sorry. jrubysql only runs on JRuby.'
+  exit 1
 end
 
+require 'jrubysql/messages'
 require 'jrubysql/config'
 require 'jrubysql/constants'
 require 'jrubysql/rdbms'

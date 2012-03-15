@@ -74,7 +74,7 @@ private
     when String
       yellow + value + reset + reset
     when Time, Java::JavaSql::Timestamp
-      green + value.to_s + reset + reset
+      magenta + value.to_s + reset + reset
     when NilClass
       bold + red + '(null)' + reset
     else

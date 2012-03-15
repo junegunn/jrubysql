@@ -3,8 +3,12 @@ require 'highline'
 
 module JRubySQL
 module OptionParser
+  class << self
+    include JRubySQL::Messages
+  end
+
   def self.parse argv
-    {:color => true}.tap do |options|
+    {:output => 'cterm'}.tap do |options|
       opts = ::OptionParser.new { |opts|
         opts.banner = 
           [
@@ -21,18 +25,18 @@ module OptionParser
         opts.on('-h', '--host HOST', 'DBMS host address') do |v|
           options[:host] = v
         end
+
+        opts.separator ""
       
         opts.on('-c', '--class-name CLASSNAME', 'Class name of the JDBC driver') do |v|
           options[:driver] = v
         end
 
-        opts.on('-d', '--database DATABASE', 'Name of the database (optional)') do |v|
-          options[:database] = v
-        end
-
         opts.on('-j', '--jdbc-url JDBC_URL', 'JDBC URL for the connection') do |v|
           options[:url] = v
         end
+
+        opts.separator ""
       
         opts.on('-u', '--user USERNAME', 'Username') do |v|
           options[:user] = v
@@ -42,16 +46,29 @@ module OptionParser
           options[:password] = v
         end
       
+        opts.on('-d', '--database DATABASE', 'Name of the database (optional)') do |v|
+          options[:database] = v
+        end
+
+        opts.separator ""
+
         opts.on('-f', '--filename FILENAME', 'SQL script file') do |v|
           options[:filename] = v
         end
 
-        opts.on('--no-color', 'Suppress ANSI color codes in output') do |v|
-          options[:color] = v
+        opts.on('-o', '--output OUTPUT_TYPE', 'Output type: cterm|term|csv (default: cterm)') do |v|
+          options[:output] = v
         end
       
+        opts.separator ""
+
         opts.on_tail('--help', "Show this message") do
           puts opts
+          exit
+        end
+
+        opts.on_tail('--version', "Show version") do
+          puts JRubySQL.name
           exit
         end
       }
@@ -62,36 +79,43 @@ module OptionParser
         end
 
         validate options
+      rescue SystemExit
+        exit 0
       rescue Exception => e
         puts e.to_s
         puts '=' * e.to_s.length
         puts opts
-        exit
+        exit 1
       end
     end#tap
   end
 
 private
   def self.validate opts
-    # Driver or Type
-    # Host or JDBC_URL
+    unless %w[cterm term csv].include?(opts[:output])
+      raise ArgumentError.new m(:invalid_output)
+    end
 
     if (!opts[:type] && !opts[:driver]) || (opts[:type] && opts[:driver])
-      raise ArgumentError.new 'Invalid connection specification'
+      raise ArgumentError.new m(:invalid_connection)
     end
 
     unless (opts[:type] && opts[:host]) || (opts[:driver] && opts[:url])
-      raise ArgumentError.new 'Invalid connection specification.'
+      raise ArgumentError.new m(:invalid_connection)
     end
 
     if opts[:type] && !JRubySQL::Constants::SUPPORTED_DBMS_TYPES.include?(opts[:type])
-      raise ArgumentError.new "#{opts[:type]} is not supported yet. Try with -c and -j options instead"
+      raise ArgumentError.new m(:unsupported_database, opts[:type])
+    end
+
+    if opts[:filename] && !File.exists?(opts[:filename])
+      raise ArgumentError.new m(:file_not_found, opts[:filename])
     end
 
   end
 
   def self.ask_password
-    HighLine.new.ask("Password: " ) { |q| q.echo = "*" }
+    HighLine.new.ask(m(:ask_password)) { |q| q.echo = "*" }
   end
 
 end#OptionParser
