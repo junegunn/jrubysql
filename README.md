@@ -66,7 +66,7 @@ bin/jrubysql -ccom.mysql.jdbc.Driver -jjdbc:mysql://localhost/test -uuser -p
 
 Screenshot
 ----------
-https://github.com/junegunn/jrubysql/raw/master/screenshots/simpsons.png
+![](https://github.com/junegunn/jrubysql/raw/master/screenshots/simpsons.png)
 
 TODO
 ----
