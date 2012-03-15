@@ -17,17 +17,21 @@ usage: jrubysql [options]
        jrubysql -t DBMS_TYPE -h HOSTNAME [-u USERNAME -p [PASSWORD] [-d DATABASE]] [-f FILENAME]
        jrubysql -c CLASSNAME -j JDBC_URL [-u USERNAME -p [PASSWORD] [-d DATABASE]] [-f FILENAME]
 
-    -t, --type DBMS_TYPE             Database type: mysql|oracle|postgres|sqlserver
+    -t, --type DBMS_TYPE             Database type: mysql/oracle/postgres/sqlserver
     -h, --host HOST                  DBMS host address
+
     -c, --class-name CLASSNAME       Class name of the JDBC driver
     -j, --jdbc-url JDBC_URL          JDBC URL for the connection
+
     -u, --user USERNAME              Username
     -p, --password [PASSWORD]        Password
     -d, --database DATABASE          Name of the database (optional)
+
     -f, --filename FILENAME          SQL script file
     -o, --output OUTPUT_TYPE         Output type: cterm|term|csv (default: cterm)
-        --no-color                   Suppress ANSI color codes in output
+
         --help                       Show this message
+        --version                    Show version
 ```
 
 Connecting to the database
@@ -59,6 +63,10 @@ jrubysql -t sqlserver -h 192.168.62.26 -u user -p password
 bin/jrubysql -corg.postgresql.Driver -jjdbc:postgresql://localhost/test
 bin/jrubysql -ccom.mysql.jdbc.Driver -jjdbc:mysql://localhost/test -uuser -p
 ```
+
+Screenshot
+----------
+https://github.com/junegunn/jrubysql/raw/master/screenshots/simpsons.png
 
 TODO
 ----
