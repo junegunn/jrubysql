@@ -25,9 +25,6 @@ class CSV
   def print_cursor empty; end
 
   def print_result ret
-    # Footer
-    elapsed = "(#{'%.2f' % ret[:elapsed]} sec)"
-
     if ret[:set?]
       ret[:result].each_with_index do |row, idx|
         puts ::CSV.generate_line(row.labels) if idx == 0
