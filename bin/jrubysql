@@ -1,0 +1,12 @@
+#!/usr/bin/env ruby
+# encoding: UTF-8
+# Junegunn Choi (junegunn.c@gmail.com)
+# 2012/03/07-
+
+# FIXME: Test
+$LOAD_PATH.unshift 'lib'
+
+require 'rubygems'
+require 'jrubysql'
+
+JRubySQL.launch ARGV
