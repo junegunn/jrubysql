@@ -14,8 +14,8 @@ Usage
 
 ```
 usage: jrubysql [options]
-       jrubysql -t DBMS_TYPE -h HOSTNAME [-u USERNAME -p [PASSWORD] [-d DATABASE]] [-f FILENAME]
-       jrubysql -c CLASSNAME -j JDBC_URL [-u USERNAME -p [PASSWORD] [-d DATABASE]] [-f FILENAME]
+       jrubysql -t DBMS_TYPE -h HOSTNAME [-u USERNAME] [-p [PASSWORD]] [-d DATABASE]
+       jrubysql -c CLASSNAME -j JDBC_URL [-u USERNAME] [-p [PASSWORD]] [-d DATABASE]
 
     -t, --type DBMS_TYPE             Database type: mysql/oracle/postgres/sqlserver
     -h, --host HOST                  DBMS host address
@@ -28,6 +28,7 @@ usage: jrubysql [options]
     -d, --database DATABASE          Name of the database (optional)
 
     -f, --filename FILENAME          SQL script file
+    -e, --execute SQLSCRIPT          SQL script
     -o, --output OUTPUT_TYPE         Output type: cterm|term|csv (default: cterm)
 
         --help                       Show this message
@@ -47,30 +48,33 @@ export CLASSPATH=$CLASSPATH:~/lib/mysql-connector-java-5.1.17-bin.jar:~/lib/ojdb
 ### With type (-t) and hostname (-h)
 
 ```
-# Supports MySQL/Oracle/PostgreSQL/MSSQL
+# Supports MySQL/Oracle/PostgreSQL/MSSQL/SQLite
 
 jrubysql -t mysql -h localhost -d test -u user -p
 jrubysql -t oracle -h localhost:1521/orcl -u user -p password
 jrubysql -t postgres -h localhost -u root
-jrubysql -t sqlserver -h 192.168.62.26 -u user -p password
+jrubysql -t sqlserver -h localhost -u user -p password
+jrubysql -t sqlite -h my.db
+   # In case of SQLite, Host = DB file
 ```
 
 ### Connect with class name of JDBC driver (-c) and JDBC URL (-j)
 
 ```
 # You can connect to any database with its JDBC driver
+# SQLite
+bin/jrubysql -c org.sqlite.JDBC -j jdbc:sqlite:my.db
 
+# PostgreSQL
 bin/jrubysql -corg.postgresql.Driver -jjdbc:postgresql://localhost/test
+
+# MySQL
 bin/jrubysql -ccom.mysql.jdbc.Driver -jjdbc:mysql://localhost/test -uuser -p
 ```
 
 Screenshot
 ----------
 ![](https://github.com/junegunn/jrubysql/raw/master/screenshots/simpsons.png)
-
-TODO
-----
-TESTS!!!
 
 Copyright
 ---------

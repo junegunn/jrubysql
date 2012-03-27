@@ -1,13 +1,14 @@
 module JRubySQL
 module Constants
-  SUPPORTED_DBMS_TYPES = [ :mysql, :oracle, :postgres, :sqlserver ]
+  SUPPORTED_DBMS_TYPES = [ :mysql, :oracle, :postgres, :sqlserver, :sqlite ]
 
   # .jrubysqlrc
-  MAX_COMMAND_HISTORY    = 100
+  DEFAULT_RC_PATH        = File.join(ENV['HOME'], '.jrubysqlrc')
   MAX_CONNECTION_HISTORY = 10
+  # MAX_COMMAND_HISTORY    = 100
 
   # Terminal (TBD)
-  MAX_COLUMN_WIDTH = 80
+  # MAX_COLUMN_WIDTH = 80
   MIN_SCREEN_ROWS  = 10
   MAX_SCREEN_ROWS  = 50
 

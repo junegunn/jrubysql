@@ -14,6 +14,8 @@ invalid output:
   Invalid output type.
 file not found:
   "File not found: $$"
+both script and filename:
+  Cannot specify both filename and script.
 
 connecting:
   Connecting to the database ...

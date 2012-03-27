@@ -20,6 +20,9 @@ Gem::Specification.new do |s|
 
   # specify any dependencies here; for example:
   s.add_development_dependency "test-unit"
+  s.add_development_dependency "mocha"
+  s.add_development_dependency "guard"
+  s.add_development_dependency "guard-test"
 
   s.add_runtime_dependency "jdbc-helper", '~> 0.7.2'
   s.add_runtime_dependency "insensitive_hash", '~> 0.2.3'

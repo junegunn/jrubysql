@@ -26,7 +26,7 @@ class Console
         { :commands => [cmd].compact }
       # Line with delimiters
       elsif line.include?(@esql.delimiter)
-        @esql << line + ' '
+        @esql << line + $/
         result = @esql.shift
         result[:sqls].each do |sql|
           Readline::HISTORY << sql + @esql.delimiter
@@ -34,7 +34,7 @@ class Console
         { :sqls => result[:sqls] }
       # SQL without delimiter
       else
-        @esql << line + ' '
+        @esql << line + $/
         empty_response
       end
     )

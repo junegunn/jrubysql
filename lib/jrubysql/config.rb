@@ -4,9 +4,8 @@ require 'fileutils'
 module JRubySQL
   # A simple key-value config in YAML
   class Config
-    DEFAULT_PATH = File.join(ENV['HOME'], '.jrubysqlrc')
 
-    def initialize path = DEFAULT_PATH
+    def initialize path = JRubySQL::Constants::DEFAULT_RC_PATH
       @path = path
       if @path && File.exists?(@path)
         @yaml = YAML.load(File.read(@path))

@@ -13,12 +13,12 @@ module OptionParser
         opts.banner = 
           [
             "usage: jrubysql [options]",
-            "       jrubysql -t DBMS_TYPE -h HOSTNAME [-u USERNAME -p [PASSWORD] [-d DATABASE]] [-f FILENAME]",
-            "       jrubysql -c CLASSNAME -j JDBC_URL [-u USERNAME -p [PASSWORD] [-d DATABASE]] [-f FILENAME]"
+            "       jrubysql -t DBMS_TYPE -h HOSTNAME [-u USERNAME] [-p [PASSWORD]] [-d DATABASE]",
+            "       jrubysql -c CLASSNAME -j JDBC_URL [-u USERNAME] [-p [PASSWORD]] [-d DATABASE]"
           ].join($/)
         opts.separator ''
 
-        opts.on('-t', '--type DBMS_TYPE', 'Database type: mysql/oracle/postgres/sqlserver') do |v|
+        opts.on('-t', '--type DBMS_TYPE', 'Database type: mysql/oracle/postgres/sqlserver/sqlite') do |v|
           options[:type] = v.downcase.to_sym
         end
 
@@ -54,6 +54,10 @@ module OptionParser
 
         opts.on('-f', '--filename FILENAME', 'SQL script file') do |v|
           options[:filename] = v
+        end
+
+        opts.on('-e', '--execute SQLSCRIPT', 'SQL script') do |v|
+          options[:script] = v
         end
 
         opts.on('-o', '--output OUTPUT_TYPE', 'Output type: cterm|term|csv (default: cterm)') do |v|
@@ -94,6 +98,10 @@ private
   def self.validate opts
     unless %w[cterm term csv].include?(opts[:output])
       raise ArgumentError.new m(:invalid_output)
+    end
+
+    if opts[:script] && opts[:filename]
+      raise ArgumentError.new m(:both_script_and_filename)
     end
 
     if (!opts[:type] && !opts[:driver]) || (opts[:type] && opts[:driver])

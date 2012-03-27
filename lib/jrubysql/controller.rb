@@ -20,7 +20,7 @@ class Controller
           puts "[#{idx + 1}] #{history.first}"
         end
         print '> '
-        select = $stdin.gets
+        select = JRubySQL::Controller.get_console_input
         select = select && select.chomp
         if (1..(histories.length)).include?(select.to_i)
           history = histories[select.to_i - 1]
@@ -40,7 +40,9 @@ class Controller
 
     # Setting up input: file or console (and more?)
     if @options[:filename]
-      @input = JRubySQL::Input::File.new(self, @options[:filename])
+      @input = JRubySQL::Input::Script.new(self, ::File.read(@options[:filename]))
+    elsif @options[:script]
+      @input = JRubySQL::Input::Script.new(self, @options[:script])
     else
       @input = JRubySQL::Input::Console.new(self)
     end
@@ -101,6 +103,10 @@ class Controller
   end
 
 private
+  def self.get_console_input
+    $stdin.gets
+  end
+
   def output result
     @output.print_result result
   end
@@ -120,7 +126,7 @@ private
     when :autocommit
       if params.nil?
         @output.info m(:current_autocommit, @rdbms.autocommit ? 'on' : 'off')
-      elsif %[on off].include?(params.downcase)
+      elsif %w[on off].include?(params.downcase)
         @rdbms.autocommit = params.downcase == 'on'
         @output.info m(:turn_autocommit, params.downcase)
       else

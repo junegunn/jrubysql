@@ -14,6 +14,8 @@ class RDBMS
       :postgres
     when /sqlserver/
       :sqlserver
+    when /sqlite/
+      :sqlite
     else
       :unknown
     end
@@ -40,6 +42,15 @@ class RDBMS
         when :sqlserver
           JDBCHelper::SqlServerConnector.connect(
             options[:host], options[:user], options[:password], options[:database])
+        when :sqlite
+          JDBCHelper::Connection.new(
+            {
+              :driver   => 'org.sqlite.JDBC',
+              :url      => "jdbc:sqlite:#{options[:host]}",
+              :user     => options[:user],
+              :password => options[:password]
+            }.reject { |k, v| v.nil? }
+          )
         end
       elsif options[:driver]
         JDBCHelper::Connection.new(
@@ -48,7 +59,7 @@ class RDBMS
             :url      => options[:url],
             :user     => options[:user],
             :password => options[:password]
-        }.reject { |k, v| v.nil? }
+          }.reject { |k, v| v.nil? }
         )
       else
         raise ArgumentError.new m(:invalid_connection)
