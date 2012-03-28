@@ -1,7 +1,7 @@
 JRubySQL Changelog
 ==================
 
-0.1.2
+0.1.3
 -----
 * SQLite type support
  * There are issues with autocommit though
