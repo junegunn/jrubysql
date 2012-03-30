@@ -5,15 +5,15 @@ class TestOptionParser < Test::Unit::TestCase
 
   def test_dbms_type
     # No host
-    assert_error /Invalid connection/, parse(%w[-t mysql])
-    assert_error /Invalid connection/, parse(%w[--type mysql])
+    assert_error /Invalid connection/, %w[-t mysql]
+    assert_error /Invalid connection/, %w[--type mysql]
 
     # No type
-    assert_error /Invalid connection/, parse(%w[-h localhost])
-    assert_error /Invalid connection/, parse(%w[--host localhost])
+    assert_error /Invalid connection/, %w[-h localhost]
+    assert_error /Invalid connection/, %w[--host localhost]
 
     # Invalid type
-    assert_error /not supported/, parse(%w[-t yoursql -h localhost])
+    assert_error /not supported/, %w[-t yoursql -h localhost]
 
     # Optional options
     opts = parse(%w[-t MySQL -h localhost])
@@ -47,12 +47,12 @@ class TestOptionParser < Test::Unit::TestCase
 
   def test_class_name
     # No JDBC URL
-    assert_error /Invalid connection/, parse(%w[-c com.mysql.jdbc.Driver])
-    assert_error /Invalid connection/, parse(%w[--class-name com.mysql.jdbc.Driver])
+    assert_error /Invalid connection/, %w[-c com.mysql.jdbc.Driver]
+    assert_error /Invalid connection/, %w[--class-name com.mysql.jdbc.Driver]
 
     # No class name
-    assert_error /Invalid connection/, parse(%w[-j jdbc:mysql://localhost/test])
-    assert_error /Invalid connection/, parse(%w[--jdbc-url jdbc:mysql://localhost/test])
+    assert_error /Invalid connection/, %w[-j jdbc:mysql://localhost/test]
+    assert_error /Invalid connection/, %w[--jdbc-url jdbc:mysql://localhost/test]
 
     [
       %w[-c com.mysql.jdbc.Driver -j jdbc:mysql://localhost -u username -p password -d database -o cterm],
@@ -70,18 +70,18 @@ class TestOptionParser < Test::Unit::TestCase
   end
 
   def test_invalid_output
-    assert_error /Invalid output/, parse(%w[-t mysql -h localhost -o xml])
+    assert_error /Invalid output/, %w[-t mysql -h localhost -o xml]
   end
 
   def test_invalid_combination
-    assert_error /Invalid connection/, parse(%w[-t mysql -j jdbc:mysql://localhost])
-    assert_error /Invalid connection/, parse(%w[-c com.mysql.jdbc.Driver -h localhost])
+    assert_error /Invalid connection/, %w[-t mysql -j jdbc:mysql://localhost]
+    assert_error /Invalid connection/, %w[-c com.mysql.jdbc.Driver -h localhost]
 
-    assert_error /both filename and script/, parse(%w[-f aaa -e bbb])
+    assert_error /both filename and script/, %w[-f aaa -e bbb]
   end
 
   def test_filename
-    assert_error /File not found/, parse(%w[-t mysql -h localhost -f no-such-file.sql])
+    assert_error /File not found/, %w[-t mysql -h localhost -f no-such-file.sql]
 
     opts = parse(%w[-t mysql -h localhost -f] + [__FILE__])
     assert_equal __FILE__, opts[:filename]
@@ -116,7 +116,7 @@ class TestOptionParser < Test::Unit::TestCase
   def assert_error msg, argv
     ret = parse_with_output argv
     assert_equal 1, ret[:return]
-    assert msg, ret[:stdout] =~ msg
+    assert ret[:stdout] =~ msg, "Expected: #{msg.source}"
   end
 end
 
