@@ -9,7 +9,7 @@ invalid connection:
 unsupported database:
   $$ is not supported yet. Try with -c and -j options instead.
 oracle service name required:
-  Oracle service name must be included in the hostname: e.g. localhost:1521/orcl
+  "Oracle service name must be included in the hostname: e.g. localhost:1521/orcl"
 invalid output:
   Invalid output type.
 file not found:

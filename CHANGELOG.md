@@ -1,6 +1,10 @@
 JRubySQL Changelog
 ==================
 
+0.1.4
+-----
+* Invalid error message on Oracle connection
+
 0.1.3
 -----
 * SQLite type support
