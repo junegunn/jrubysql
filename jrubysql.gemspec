@@ -20,7 +20,7 @@ Gem::Specification.new do |s|
 
   # specify any dependencies here; for example:
   s.add_development_dependency "test-unit"
-  s.add_development_dependency "mocha"
+  s.add_development_dependency "mocha", '~> 0.11.0'
   s.add_development_dependency "guard"
   s.add_development_dependency "guard-test"
 
