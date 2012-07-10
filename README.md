@@ -17,7 +17,7 @@ usage: jrubysql [options]
        jrubysql -t DBMS_TYPE -h HOSTNAME [-u USERNAME] [-p [PASSWORD]] [-d DATABASE]
        jrubysql -c CLASSNAME -j JDBC_URL [-u USERNAME] [-p [PASSWORD]] [-d DATABASE]
 
-    -t, --type DBMS_TYPE             Database type: mysql/oracle/postgres/sqlserver
+    -t, --type DBMS_TYPE             Database type: mysql/oracle/postgres/sqlserver/cassandra
     -h, --host HOST                  DBMS host address
 
     -c, --class-name CLASSNAME       Class name of the JDBC driver
