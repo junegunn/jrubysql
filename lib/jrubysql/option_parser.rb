@@ -18,7 +18,7 @@ module OptionParser
           ].join($/)
         opts.separator ''
 
-        opts.on('-t', '--type DBMS_TYPE', 'Database type: mysql/oracle/postgres/sqlserver/sqlite') do |v|
+        opts.on('-t', '--type DBMS_TYPE', 'Database type: mysql/oracle/postgres/sqlserver/sqlite/cassandra') do |v|
           options[:type] = v.downcase.to_sym
         end
 

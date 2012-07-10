@@ -6,7 +6,24 @@ module JRubySQL
 module Output
 class CTerm < Term
   include ANSI::Code
-  HELP = Erubis::Eruby.new(File.read File.join(File.dirname(__FILE__), '../doc/help.txt.erb')).result(binding)
+
+  attr_reader :colors
+
+  def initialize colors
+    super()
+
+    @colors =
+        YAML.load(
+          File.read(
+            File.join(
+              File.dirname(__FILE__), "color_scheme/default.yml"))).merge(colors || {})
+
+    @ccode = @colors.inject(Hash.new('')) { |h, pair| 
+      k, v = pair
+      h[k.to_sym] = v.strip.split(/\s+/).map { |code| ANSI::Code.send(code) rescue '' }.join
+      h
+    }
+  end
 
   def welcome!
     puts bold + JRubySQL.name + reset
@@ -14,11 +31,11 @@ class CTerm < Term
 
   def cursor empty
     if empty
-      wrap('jrubysql', bold) + 
-            wrap('> ', bold + green)
+      wrap('jrubysql', @ccode[:prompt1]) + 
+            wrap('> ', @ccode[:prompt2])
     else
-      wrap('       -', bold + yellow) +
-            wrap('> ', bold + red)
+      wrap('       -', @ccode[:prompt3]) +
+            wrap('> ', @ccode[:prompt4])
     end
   end
 
@@ -28,66 +45,59 @@ class CTerm < Term
 
   def print_help
     puts
-    puts wrap(HELP, blue + bold)
+    puts wrap(HELP, @ccode[:help])
     puts
   end
 
   def info message
-    col = blue + bold
-    puts wrap(message, col)
+    puts wrap(message, @ccode[:info])
   end
 
   def result message
-    col = green
-    puts wrap(message, green)
+    puts wrap(message, @ccode[:result])
   end
 
   def warn message
-    col = yellow + bold
-    puts wrap(message, col)
+    puts wrap(message, @ccode[:warning])
   end
 
   def error message
-    col = red + bold
-    puts wrap(message, col)
+    puts wrap(message, @ccode[:error])
   end
 
 private
-  def separator_for row
-    # 13-bytes for ANSI codes
-    # - bold/reset: 4
-    # - colors: 5
-    '+-' + row.map { |e| '-' * (e.length - 13) }.join('-+-') + '-+'
+  def print_table ret
+    super ret, {
+      :hborder => @ccode[:border] + '-',
+      :vborder => wrap('|', @ccode[:border]),
+      :iborder => wrap('+', @ccode[:border]),
+    }
   end
 
   def decorate_label label
-    white + bold + label + reset
+    wrap(label, @ccode[:label])
   end
 
   # This looks stupid though.
   def decorate value
     case value
     when BigDecimal
-      cyan + value.to_s('F') + reset + reset
+      wrap(value.to_s('F'), @ccode[:number])
     when Numeric
-      cyan + value.to_s + reset + reset
+      wrap(value.to_s, @ccode[:number])
     when String
-      yellow + value + reset + reset
+      wrap(value, @ccode[:string])
     when Time, Java::JavaSql::Timestamp
-      magenta + value.to_s + reset + reset
+      wrap(value.to_s, @ccode[:time])
     when NilClass
-      bold + red + '(null)' + reset
+      wrap('(null)', @ccode[:nil])
     else
-      white + reset + value.to_s + reset
+      wrap(value.to_s, @ccode[:default])
     end
   end
 
-  def cnow
-    green + now + reset
-  end
-
   def wrap text, color
-    color + text + reset
+    color + text + (reset unless color.empty?)
   end
     
 end#CTerm

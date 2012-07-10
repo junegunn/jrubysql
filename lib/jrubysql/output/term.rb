@@ -77,27 +77,22 @@ class Term
   end
 
 private
-  def print_table ret
+  def print_table ret, tabularize_opts = {}
     cnt = 0
     lines = [(@terminal.getTerminalHeight rescue JRubySQL::Constants::MAX_SCREEN_ROWS) - 5, 
              JRubySQL::Constants::MIN_SCREEN_ROWS].max
     ret.each_slice(lines) do |slice|
       cnt += slice.length
 
-      table = [slice.first.labels.map { |l| decorate_label l }] + 
-          slice.map { |row| row.to_a.map { |v| decorate v } }
-
-      output = Tabularize.it(table, :unicode_display => true)
-      separator = separator_for(output.first)
-      output_strs = output.map { |r| '| ' + r.join(' | ') + ' |' }
-      [0, 2, -1].each { |l| output_strs.insert l, separator }
-      puts output_strs
+      table = Tabularize.new tabularize_opts
+      table << slice.first.labels.map { |l| decorate_label l }
+      table.separator!
+      slice.each do |row|
+        table << row.to_a.map { |v| decorate v }
+      end
+      puts table
     end
     cnt
-  end
-
-  def separator_for row
-    '+-' + row.map { |e| '-' * e.length }.join('-+-') + '-+'
   end
 
   def decorate_label label
@@ -111,10 +106,6 @@ private
     else
       value.to_s
     end
-  end
-
-  def now
-    Time.now.strftime('%Y/%m/%d %H:%M:%S')
   end
 end#Term
 end#Output

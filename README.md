@@ -48,14 +48,17 @@ export CLASSPATH=$CLASSPATH:~/lib/mysql-connector-java-5.1.17-bin.jar:~/lib/ojdb
 ### With type (-t) and hostname (-h)
 
 ```
-# Supports MySQL/Oracle/PostgreSQL/MSSQL/SQLite
+# Supports MySQL/Oracle/PostgreSQL/MSSQL/SQLite/Cassandra CQL3
 
 jrubysql -t mysql -h localhost -d test -u user -p
 jrubysql -t oracle -h localhost:1521/orcl -u user -p password
 jrubysql -t postgres -h localhost -u root
 jrubysql -t sqlserver -h localhost -u user -p password
-jrubysql -t sqlite -h my.db
-   # In case of SQLite, Host = DB file
+
+jrubysql -t sqlite -h my.db                     # For SQLite, host = DB file
+
+jrubysql -t cassandra -h localhost
+jrubysql -t cassandra -h localhost -d keyspace  # Optional keyspace
 ```
 
 ### Connect with class name of JDBC driver (-c) and JDBC URL (-j)

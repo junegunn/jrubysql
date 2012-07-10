@@ -16,6 +16,8 @@ class RDBMS
       :sqlserver
     when /sqlite/
       :sqlite
+    when /cassandra/
+      :cassandra
     else
       :unknown
     end
@@ -26,7 +28,7 @@ class RDBMS
       if options[:type]
         case options[:type]
         when :mysql
-          JDBCHelper::MySQLConnector.connect(
+          JDBCHelper::MySQL.connect(
             options[:host], options[:user], options[:password], options[:database])
         when :oracle
           host, svc = options[:host].split('/')
@@ -34,14 +36,17 @@ class RDBMS
             # FIXME
             raise ArgumentError.new m(:oracle_service_name_required)
           end
-          JDBCHelper::OracleConnector.connect(
+          JDBCHelper::Oracle.connect(
             host, options[:user], options[:password], svc)
         when :postgres
-          JDBCHelper::PostgresConnector.connect(
+          JDBCHelper::Postgres.connect(
             options[:host], options[:user], options[:password], options[:database])
         when :sqlserver
-          JDBCHelper::SqlServerConnector.connect(
+          JDBCHelper::SqlServer.connect(
             options[:host], options[:user], options[:password], options[:database])
+        when :cassandra
+          JDBCHelper::Cassandra.connect(
+            options[:host], options[:database])
         when :sqlite
           JDBCHelper::Connection.new(
             {

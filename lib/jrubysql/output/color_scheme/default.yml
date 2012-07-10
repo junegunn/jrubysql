@@ -1,0 +1,20 @@
+---
+info:    bold blue
+warning: yellow
+error:   bold red
+help:    bold blue
+
+prompt1: bold
+prompt2: bold green
+prompt3: bold yellow
+prompt4: bold red
+result:  green
+
+border:  blue
+label:   bold
+
+number:  cyan
+string:  yellow
+time:    magenta
+nil:     bold red
+

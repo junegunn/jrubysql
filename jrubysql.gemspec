@@ -24,9 +24,9 @@ Gem::Specification.new do |s|
   s.add_development_dependency "guard"
   s.add_development_dependency "guard-test"
 
-  s.add_runtime_dependency "jdbc-helper", '~> 0.7.2'
+  s.add_runtime_dependency "jdbc-helper", '~> 0.7.4'
   s.add_runtime_dependency "insensitive_hash", '~> 0.2.3'
-  s.add_runtime_dependency "tabularize", '~> 0.1.1'
+  s.add_runtime_dependency "tabularize", '~> 0.2.0'
   s.add_runtime_dependency "each_sql", '~> 0.3.1'
   s.add_runtime_dependency "highline", '~> 1.6.11'
   s.add_runtime_dependency "ansi", '~> 1.4.2'

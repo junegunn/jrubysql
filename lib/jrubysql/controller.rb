@@ -50,7 +50,8 @@ class Controller
     # Setting up output: Colored terminal 
     case @options[:output]
     when 'cterm'
-      @output = JRubySQL::Output::CTerm.new
+      @output = JRubySQL::Output::CTerm.new @config['colors']
+      @config['colors'] = @output.colors
     when 'term'
       @output = JRubySQL::Output::Term.new
     when 'csv'

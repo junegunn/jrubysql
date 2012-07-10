@@ -1,6 +1,6 @@
 module JRubySQL
 module Constants
-  SUPPORTED_DBMS_TYPES = [ :mysql, :oracle, :postgres, :sqlserver, :sqlite ]
+  SUPPORTED_DBMS_TYPES = [ :mysql, :oracle, :postgres, :sqlserver, :sqlite, :cassandra ]
 
   # .jrubysqlrc
   DEFAULT_RC_PATH        = File.join(ENV['HOME'], '.jrubysqlrc')

@@ -1,6 +1,12 @@
 JRubySQL Changelog
 ==================
 
+0.1.5
+-----
+* Supports Cassandra CQL3
+* Configurable color
+ * Edit color codes in ~/.jrubysqlrc
+
 0.1.4
 -----
 * Invalid error message on Oracle connection
