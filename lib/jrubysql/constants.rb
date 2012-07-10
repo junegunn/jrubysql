@@ -5,7 +5,7 @@ module Constants
   # .jrubysqlrc
   DEFAULT_RC_PATH        = File.join(ENV['HOME'], '.jrubysqlrc')
   MAX_CONNECTION_HISTORY = 10
-  # MAX_COMMAND_HISTORY    = 100
+  MAX_COMMAND_HISTORY    = 20
 
   # Terminal (TBD)
   # MAX_COLUMN_WIDTH = 80

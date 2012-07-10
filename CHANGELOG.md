@@ -6,6 +6,7 @@ JRubySQL Changelog
 * Supports Cassandra CQL3
 * Configurable color
  * Edit color codes in ~/.jrubysqlrc
+* Remembers commands for connection
 
 0.1.4
 -----

@@ -8,6 +8,12 @@ class Console
     @esql = JRubySQL::Input.get_parser @controller.db_type
   end
 
+  def prepare sqls
+    sqls.each do |sql|
+      Readline::HISTORY << sql
+    end
+  end
+
   def get
     empty_response = { :sqls => [], :commands => [] }
     line = Readline::readline(@controller.cursor(@esql.empty?), false)
@@ -23,7 +29,7 @@ class Console
         empty_response
       # Console commands
       elsif @esql.empty? && cmd = process_command(line)
-        { :commands => [cmd].compact }
+        { :commands => [cmd, line] }
       # Line with delimiters
       elsif line.include?(@esql.delimiter)
         @esql << line + $/
@@ -31,7 +37,7 @@ class Console
         result[:sqls].each do |sql|
           Readline::HISTORY << sql + @esql.delimiter
         end
-        { :sqls => result[:sqls] }
+        { :sqls => result[:sqls], :delimiter => @esql.delimiter }
       # SQL without delimiter
       else
         @esql << line + $/

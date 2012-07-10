@@ -1,4 +1,6 @@
 ---
+converting jrubysqlrc:
+  ".jrubysqlrc upgraded."
 choose parameter:
   "Parameter not given. Choose one:"
 ask password:

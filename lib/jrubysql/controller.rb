@@ -8,6 +8,8 @@ class Controller
 
   def initialize options, argv_str
     @config = JRubySQL::Config.new
+    upgrade_jrubysqlrc!
+
     histories = @config['connections']
 
     if options.nil?
@@ -16,16 +18,16 @@ class Controller
       else
         # FIXME: Output
         puts m(:choose_parameter)
-        histories.each_with_index do |history, idx|
-          puts "[#{idx + 1}] #{history.first}"
+        histories.each_with_index do |entry, idx|
+          puts "[#{idx + 1}] #{entry.keys.first}"
         end
         print '> '
         select = JRubySQL::Controller.get_console_input
         select = select && select.chomp
         if (1..(histories.length)).include?(select.to_i)
-          history = histories[select.to_i - 1]
-          @options = history.last
-          @argv_str = history.first
+          entry     = histories[select.to_i - 1]
+          @options  = entry.values.first[:options]
+          @argv_str = entry.keys.first
         else
           puts
           JRubySQL::OptionParser.parse []
@@ -70,28 +72,40 @@ class Controller
     end
     @output.info m(:connected)
 
-    history = @config['connections'] || []
-    history.unshift [@argv_str, @options]
-    history.uniq!
-    if history.length > JRubySQL::Constants::MAX_CONNECTION_HISTORY
-      history = history[0, JRubySQL::Constants::MAX_CONNECTION_HISTORY]
-    end
+    history   = @config['connections'] || []
+    entry_idx = history.index { |h| h.keys.first == @argv_str }
+    entry     = entry_idx ? history.delete_at(entry_idx) : { @argv_str => {} }
+    entry[@argv_str][:options] = @options
+    commands = entry[@argv_str][:commands] ||= []
+    @input.prepare commands
+
+    history.unshift entry
+    history.pop while history.length > JRubySQL::Constants::MAX_CONNECTION_HISTORY
     @config['connections'] = history
+
+    add_cmd = lambda do |c|
+      commands.push c unless commands.last == c
+      commands.shift while commands.length > JRubySQL::Constants::MAX_COMMAND_HISTORY
+      @config['connections'] = history
+    end
 
     loop do
       ret = @input.get
 
       ret[:sqls].each do |sql|
         begin
+          add_cmd.call sql + ret[:delimiter]
           output @rdbms.execute(sql)
         rescue Exception => e
           @output.error e.to_s
         end
       end if ret.has_key?(:sqls)
 
-      ret[:commands].each do |command|
+      if ret.has_key?(:commands) && ret[:commands].first
+        command, line = ret[:commands]
+        add_cmd.call line unless command.keys.first == :quit
         process_command command.keys.first, command.values.first
-      end if ret.has_key?(:commands)
+      end
     end
   end
 
@@ -106,6 +120,19 @@ class Controller
 private
   def self.get_console_input
     $stdin.gets
+  end
+
+  def upgrade_jrubysqlrc!
+    history = @config['connections'] || []
+
+    # Convert (0.1.5)
+    if !history.empty? && history[0].is_a?(Array)
+      history = history.map { |h|
+        { h.first => {:options => h.last} }
+      }
+      @config['connections'] = history
+      puts m(:converting_jrubysqlrc)
+    end
   end
 
   def output result
