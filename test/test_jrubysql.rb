@@ -193,11 +193,11 @@ private
     prev_conn = JRubySQL::Config.new['connections'].first
     # assert_equal :sqlite,   prev_conn.last[:type]
     # assert_match 'test.db', prev_conn.last[:host]
-    assert_equal :mysql,      prev_conn.last[:type]
-    assert_match 'localhost', prev_conn.last[:host]
+    assert_equal :mysql,      prev_conn.values.first[:options][:type]
+    assert_match 'localhost', prev_conn.values.first[:options][:host]
 
     if command
-      assert_match command,     prev_conn.first
+      assert_match command, prev_conn.keys.first
     end
   end
 
