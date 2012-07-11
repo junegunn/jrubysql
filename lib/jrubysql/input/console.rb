@@ -37,7 +37,7 @@ class Console
         result[:sqls].each do |sql|
           Readline::HISTORY << sql + @esql.delimiter
         end
-        { :sqls => result[:sqls], :delimiter => @esql.delimiter }
+        { :sqls => result[:sqls], :delimiter => @esql.delimiter, :history => true }
       # SQL without delimiter
       else
         @esql << line + $/

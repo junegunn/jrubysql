@@ -94,7 +94,7 @@ class Controller
 
       ret[:sqls].each do |sql|
         begin
-          add_cmd.call sql + ret[:delimiter]
+          add_cmd.call sql + ret[:delimiter] if ret[:history]
           output @rdbms.execute(sql)
         rescue Exception => e
           @output.error e.to_s
