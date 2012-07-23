@@ -71,6 +71,7 @@ private
       :hborder => @ccode[:border] + '-',
       :vborder => wrap('|', @ccode[:border]),
       :iborder => wrap('+', @ccode[:border]),
+      :ellipsis => wrap('>', @ccode[:ellipsis])
     }
   end
 
@@ -97,7 +98,7 @@ private
   end
 
   def wrap text, color
-    color + text + (reset unless color.empty?)
+    color + text + (color.empty? ? '' : reset)
   end
     
 end#CTerm

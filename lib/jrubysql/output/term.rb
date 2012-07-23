@@ -81,10 +81,11 @@ private
     cnt = 0
     lines = [(@terminal.getTerminalHeight rescue JRubySQL::Constants::MAX_SCREEN_ROWS) - 5, 
              JRubySQL::Constants::MIN_SCREEN_ROWS].max
+    cols = (@terminal.getTerminalWidth rescue nil)
     ret.each_slice(lines) do |slice|
       cnt += slice.length
 
-      table = Tabularize.new tabularize_opts
+      table = Tabularize.new tabularize_opts.merge(:screen_width => cols)
       table << slice.first.labels.map { |l| decorate_label l }
       table.separator!
       slice.each do |row|
