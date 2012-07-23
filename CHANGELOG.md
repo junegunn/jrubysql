@@ -4,7 +4,6 @@ JRubySQL Changelog
 0.1.6
 -----
 * Bug fix: Fails to render data type with no assigned color
-* Column cut-off on small screen
 
 0.1.5
 -----
