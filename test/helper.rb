@@ -23,7 +23,7 @@ module JRubySQLTestHelper
 
       return {
         :stdout => $stdout.string,
-        :stderr => $stderr.string, 
+        :stderr => $stderr.string,
         :return => ret
       }
     ensure

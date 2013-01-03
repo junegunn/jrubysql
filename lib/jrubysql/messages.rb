@@ -14,10 +14,10 @@ module Messages
   end
 
 private
-  MESSAGES = 
+  MESSAGES =
     InsensitiveHash[
       YAML.load(File.read File.join( File.dirname(__FILE__), 'messages.yml' ))
-    ].tap { |ih| ih.underscore = true }
+    ]
 end#Messages
 end#JRubySQL
 

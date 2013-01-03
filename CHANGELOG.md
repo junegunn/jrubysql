@@ -1,6 +1,10 @@
 JRubySQL Changelog
 ==================
 
+0.1.7
+-----
+* Fixed NoMethodError in JRuby 1.7+
+
 0.1.6
 -----
 * Bug fix: Fails to render data type with no assigned color

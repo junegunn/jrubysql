@@ -11,8 +11,22 @@ class Term
 
   def initialize
     # Make use of JLine included in JRuby
-    java_import 'jline.Terminal'
-    @terminal = Terminal.getTerminal
+    terminal =
+      case JRUBY_VERSION
+      when /^1\.7/
+        Java::jline.console.ConsoleReader.new.getTerminal
+      when /^1\.6/
+        Java::jline.ConsoleReader.new.getTerminal
+      end
+
+    @get_terminal_size = lambda {
+      case JRUBY_VERSION
+      when /^1\.7/
+        [ terminal.width, terminal.height ]
+      when /^1\.6/
+        [ terminal.getTerminalWidth, terminal.getTerminalHeight ]
+      end
+    }
     trap 'INT' do
       Thread.main.raise Interrupt
     end
@@ -79,9 +93,10 @@ class Term
 private
   def print_table ret, tabularize_opts = {}
     cnt = 0
-    lines = [(@terminal.getTerminalHeight rescue JRubySQL::Constants::MAX_SCREEN_ROWS) - 5, 
+    term_size = @get_terminal_size.call
+    lines = [(term_size.call[1] rescue JRubySQL::Constants::MAX_SCREEN_ROWS) - 5,
              JRubySQL::Constants::MIN_SCREEN_ROWS].max
-    cols = (@terminal.getTerminalWidth rescue nil)
+    cols = (term_size.call[0] rescue nil)
     ret.each_slice(lines) do |slice|
       cnt += slice.length
 

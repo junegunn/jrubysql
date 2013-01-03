@@ -45,7 +45,7 @@ class TestJRubySQL < Test::Unit::TestCase
       create table if not exists jrubysql (a int) engine=innodb;
       autocommit
 
-      insert 
+      insert
         into /* ;;; */
       jrubysql
         values (1);
@@ -176,7 +176,7 @@ class TestJRubySQL < Test::Unit::TestCase
       drop table jrubysql;
       exit
     "
-    ret = capture { JRubySQL.launch [] } 
+    ret = capture { JRubySQL.launch [] }
     assert_equal '999', ret[:stdout].lines.map(&:chomp)[-1]
 
     assert_prev_conn /csv/
