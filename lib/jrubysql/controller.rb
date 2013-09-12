@@ -160,6 +160,15 @@ private
       else
         @output.error m(:invalid_autocommit, params)
       end
+    when :display
+      params = params.downcase
+      if %w[table pairs].include? params
+        if @output.respond_to?(:display_mode=)
+          @output.display_mode = params.to_sym
+        end
+      else
+        @output.error m(:invalid_display)
+      end
     else
       # TODO
       @output.error m(:unknown_command)

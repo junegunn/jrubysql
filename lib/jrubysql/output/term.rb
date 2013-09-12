@@ -27,6 +27,7 @@ class Term
         [ terminal.getTerminalWidth, terminal.getTerminalHeight ]
       end
     }
+    self.display_mode = :table
     trap 'INT' do
       Thread.main.raise Interrupt
     end
@@ -76,7 +77,7 @@ class Term
 
     if ret[:set?]
       begin
-        cnt = print_table ret[:result]
+        cnt = send(@printer, ret[:result])
         result m(:rows_returned, cnt, cnt > 1 ? 's' : '', elapsed)
       rescue Interrupt
         warn m(:interrupted)
@@ -90,7 +91,29 @@ class Term
     puts
   end
 
+  def display_mode= mode
+    @printer = "print_#{mode}".to_sym
+  end
+
 private
+  def print_pairs ret
+    cnt = 0
+    labels = ret.first.labels.map { |e| e + ': ' }
+    max_label_len = labels.map(&:length).max
+    ret.each do |row|
+      pairs = labels.zip row.to_a
+      pairs.each_with_index do |pair, idx|
+        print (idx == 0) ? '- ' : '  '
+        l, v = pair
+        print l.ljust(max_label_len, ' ')
+        puts v.to_s
+      end
+      puts
+      cnt += 1
+    end
+    cnt
+  end
+
   def print_table ret, tabularize_opts = {}
     cnt = 0
     term_size = @get_terminal_size.call

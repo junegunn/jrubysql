@@ -77,6 +77,8 @@ private
       { :autocommit => $1 }
     when 'now'
       { :now => nil }
+    when /^display (\S+)(#{Regexp.escape delimiter})?$/
+      { :display => $1 }
     when /^(exit|quit)(#{Regexp.escape delimiter})?$/
       { :quit => nil }
     else

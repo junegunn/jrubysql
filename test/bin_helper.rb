@@ -2,7 +2,7 @@
 # encoding: utf-8
 # junegunn.c@gmail.com
 
-# DISCLAIMER: 
+# DISCLAIMER:
 #   Not a real test!
 #   Just a helper script for running scripts with local source
 

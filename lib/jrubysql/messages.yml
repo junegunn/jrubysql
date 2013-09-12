@@ -19,6 +19,9 @@ file not found:
 both script and filename:
   Cannot specify both filename and script.
 
+invalid display:
+  "Invalid display type: must be table or pairs"
+
 connecting:
   Connecting to the database ...
 connected:
