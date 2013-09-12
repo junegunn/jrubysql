@@ -94,9 +94,9 @@ private
   def print_table ret, tabularize_opts = {}
     cnt = 0
     term_size = @get_terminal_size.call
-    lines = [(term_size.call[1] rescue JRubySQL::Constants::MAX_SCREEN_ROWS) - 5,
+    lines = [(term_size[1] rescue JRubySQL::Constants::MAX_SCREEN_ROWS) - 5,
              JRubySQL::Constants::MIN_SCREEN_ROWS].max
-    cols = (term_size.call[0] rescue nil)
+    cols = (term_size[0] rescue nil)
     ret.each_slice(lines) do |slice|
       cnt += slice.length
 

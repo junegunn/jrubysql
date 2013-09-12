@@ -18,7 +18,7 @@ class CTerm < Term
             File.join(
               File.dirname(__FILE__), "color_scheme/default.yml"))).merge(colors || {})
 
-    @ccode = @colors.inject(Hash.new('')) { |h, pair| 
+    @ccode = @colors.inject(Hash.new('')) { |h, pair|
       k, v = pair
       h[k.to_sym] = v.strip.split(/\s+/).map { |code| ANSI::Code.send(code) rescue '' }.join
       h
@@ -31,7 +31,7 @@ class CTerm < Term
 
   def cursor empty
     if empty
-      wrap('jrubysql', @ccode[:prompt1]) + 
+      wrap('jrubysql', @ccode[:prompt1]) +
             wrap('> ', @ccode[:prompt2])
     else
       wrap('       -', @ccode[:prompt3]) +
@@ -100,7 +100,7 @@ private
   def wrap text, color
     color + text + (color.empty? ? '' : reset)
   end
-    
+
 end#CTerm
 end#Output
 end#JRubySQL
