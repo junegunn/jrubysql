@@ -98,9 +98,9 @@ class Term
 private
   def print_pairs ret
     cnt = 0
-    labels = ret.first.labels.map { |e| e + ': ' }
-    max_label_len = labels.map(&:length).max
     ret.each do |row|
+      labels = row.labels.map { |e| e + ': ' }
+      max_label_len = labels.map(&:length).max
       pairs = labels.zip row.to_a
       pairs.each_with_index do |pair, idx|
         print (idx == 0) ? '- ' : '  '

@@ -24,11 +24,11 @@ Gem::Specification.new do |s|
   s.add_development_dependency "guard"
   s.add_development_dependency "guard-test"
 
-  s.add_runtime_dependency "jdbc-helper", '~> 0.7.4'
-  s.add_runtime_dependency "insensitive_hash", '~> 0.3.0'
-  s.add_runtime_dependency "tabularize", '~> 0.2.4'
-  s.add_runtime_dependency "each_sql", '~> 0.3.1'
-  s.add_runtime_dependency "highline", '~> 1.6.11'
-  s.add_runtime_dependency "ansi", '~> 1.4.2'
+  s.add_runtime_dependency "jdbc-helper", '~> 0.8.0'
+  s.add_runtime_dependency "insensitive_hash", '~> 0.3.3'
+  s.add_runtime_dependency "tabularize", '~> 0.2.9'
+  s.add_runtime_dependency "each_sql", '~> 0.4.0'
+  s.add_runtime_dependency "highline", '~> 1.6.19'
+  s.add_runtime_dependency "ansi", '~> 1.4.3'
   s.add_runtime_dependency "erubis", '~> 2.7.0'
 end
